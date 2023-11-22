@@ -17,18 +17,26 @@ async function searchBooks() {
   // logs and returns book data based on user
   try {
     // Gets information from the API
-    let response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${ userInput }s&key=${ apiKey }`);
+    let response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${ userInput }s&key=${ apiKey }`);
     let bookData = await response.json();
     console.log(bookData)
     // Empties all the previous visible books
-    let list = document.getElementById("book-info")
-    empty(list)
+    let cards = document.getElementsByClassName("cards")[0]
+    empty(cards)
 
     // Prints 5 titles
     for (i = 0; i < 10; i++)
     {
-      inputTitle = `<li>${bookData.items[i].volumeInfo.title}</li>`
-      document.getElementById("book-info").insertAdjacentHTML('beforeend', inputTitle)
+      if (bookData.items[i].volumeInfo.imageLinks || 0)
+        bookImage = `<img src='${bookData.items[i].volumeInfo.imageLinks.thumbnail}'>`
+      else {
+        bookImage = `<img src="no-book-cover-available-4214562573-removebg-preview.png">`
+      }
+      //console.log(bookData[i]) 
+      inputTitle = `<p>${bookData.items[i].volumeInfo.title}</p>`
+      newDiv = `<div class="card"> ${bookImage} ${inputTitle} </div> `
+      document.getElementsByClassName("cards")[0].insertAdjacentHTML('beforeend', newDiv)
+
     }
     
     //Catches error
