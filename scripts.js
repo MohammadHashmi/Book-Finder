@@ -17,9 +17,9 @@ async function searchBooks() {
   // logs and returns book data based on user
   try {
     // Gets information from the API
-    let response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${ userInput }s&key=${ apiKey }`);
+    let response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${ userInput }&key=${ apiKey }`);
     let bookData = await response.json();
-    console.log(bookData)
+
     // Empties all the previous visible books
     let cards = document.getElementsByClassName("cards")[0]
     empty(cards)
@@ -27,14 +27,21 @@ async function searchBooks() {
     // Prints 5 titles
     for (i = 0; i < 10; i++)
     {
+
+      // Checks if a thumbnail exists and selects the photo to use accordingly
       if (bookData.items[i].volumeInfo.imageLinks || 0)
         bookImage = `<img src='${bookData.items[i].volumeInfo.imageLinks.thumbnail}'>`
       else {
         bookImage = `<img src="no-book-cover-available-4214562573-removebg-preview.png">`
       }
-      //console.log(bookData[i]) 
+
+      // Creates a paragraph tag for the title
       inputTitle = `<p>${bookData.items[i].volumeInfo.title}</p>`
+
+      // Creates a new div with all the elements needed
       newDiv = `<div class="card"> ${bookImage} ${inputTitle} </div> `
+
+      // Inserts the new div into the html
       document.getElementsByClassName("cards")[0].insertAdjacentHTML('beforeend', newDiv)
 
     }
